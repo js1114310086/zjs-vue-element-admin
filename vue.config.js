@@ -174,6 +174,13 @@ module.exports = {
    * 需要注意的是该选项仅影响由 html-webpack-plugin 在构建时注入的标签 - 直接写在模版 (public/index.html) 中的标签不受影响。
    * 另外，当启用 SRI 时，preload resource hints 会被禁用，因为 Chrome 的一个 bug 会导致文件被下载两次。
    */
+  /**
+   * devServer
+   * Type: Object
+   * 所有 webpack-dev-server 的选项都支持。注意：
+   * 有些值像 host、port 和 https 可能会被命令行参数覆写。
+   * 有些值像 publicPath 和 historyApiFallback 不应该被修改，因为它们需要和开发服务器的 publicPath 同步以保障正常的工作。
+   * */
   devServer: {
     port: port,
     open: true,
@@ -183,6 +190,31 @@ module.exports = {
       errors: true
     },
     before: require('./mock/mock-server.js')
+    /**
+     * proxy
+     * Type: string | Object
+     * 如果你的前端应用和后端 API 服务器没有运行在同一个主机上，
+     * 你需要在开发环境下将 API 请求代理到 API 服务器。这个问题可以通过 vue.config.js 中的 devServer.proxy 选项来配置。
+     * 1、devServer.proxy 可以是一个指向开发环境 API 服务器的字符串：
+     * devServer: {
+     *   proxy: 'http://localhost:4000'
+     * }
+     * 2、会告诉开发服务器将任何未知请求 (没有匹配到静态文件的请求) 代理到http://localhost:4000。
+     * 如果你想要更多的代理控制行为，也可以使用一个 path: options 成对的对象。
+     * 完整的选项可以查阅 https://github.com/chimurai/http-proxy-middleware#proxycontext-config
+     * proxy: {
+     *   '/api': {
+     *     // target：要使用 url 模块解析的 url 字符串
+     *     target: '<url>',
+     *     // ws: true/false：如果要代理 Websocket
+     *     ws: true,
+     *     // changeOrigin: true/false - 将主机标头的原点更改为目标 URL
+     *     changeOrigin: true,
+     *   },
+     *   '/foo': {
+     *     target: '<other_url>'
+     *   }
+     * } */
   },
   /**
    * configureWebpack
