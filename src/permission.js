@@ -1,3 +1,4 @@
+// permision.js 登录的校验和登录之后的路由跳转
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'

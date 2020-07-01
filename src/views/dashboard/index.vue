@@ -26,6 +26,11 @@ export default {
     if (!this.roles.includes('admin')) {
       this.currentRole = 'editorDashboard'
     }
+    console.log('process--是-->', process)
+    console.log('process.env--是-->', process.env)
+    console.log('process.env.NODE_ENV--是-->', process.env.NODE_ENV)
+    console.log('process.env.VUE_APP_BASE_API--是-->', process.env.VUE_APP_BASE_API)
+    console.log('process.env.VUE_APP_BASE_API--是-->', process.env.VUE_APP_DEV_API)
   }
 }
 </script>

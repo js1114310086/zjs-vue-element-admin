@@ -11,26 +11,50 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import testDemoRouter from './modules/test-demo'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
+ *                                // 当设置 true 的时候该路由不会在侧边栏出现（默认为false） 如401，login等页面，或者如一些编辑页面/edit/1
+ *
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
  *                                it will becomes nested mode, otherwise not show the root menu
+ *                                it will becomes nested mode, otherwise not show the root menu
+ *                                // 当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
+ *                                // 只有一个时，会将那个子路由当做根路由显示在侧边栏--如引导页面
+ *                                // 若你想不管路由下面的 children 声明的个数都显示你的根路由
+ *                                // 你可以设置 alwaysShow: true，这样它就会忽略之前定义的规则，一直显示根路由
+ *
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
+ *                                // 当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
+ *
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ *                                // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+ *
+ *
  * meta : {
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
+ *                               // 设置该路由进入的权限，支持多个权限叠加
+ *
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+ *                               // 设置该路由在侧边栏和面包屑中展示的名字
+ *
     icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
+ *                               //设置该路由的图标，支持 svg-class，也支持 el-icon-x element-ui 的 icon
     noCache: true                if set true, the page will no be cached(default is false)
+ *                               // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
     affix: true                  if set true, the tag will affix in the tags-view
+ *                               // 若果设置为true，它则会固定在tags-view中(默认 false)
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
+ *                               // 如果设置为false，则不会在breadcrumb面包屑中显示(默认 true)
+    activeMenu: '/article/list'  if set path, the sidebar will highlight the path you set
+ *                               // 当路由设置了该属性，则会高亮相对应的侧边栏。
+ *                               // 这在某些场景非常有用，比如：一个文章的列表页路由为：/article/list
+ *                               // 点击文章进入文章详情页，这时候路由为/article/1，但你想在侧边栏高亮文章列表的路由，就可以进行如下设置
  */
 
 /**
@@ -73,13 +97,26 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/home',
     children: [
       {
-        path: 'dashboard',
+        path: 'home',
+        component: () => import('@/views/home/index'),
+        name: 'Home',
+        meta: { title: '首页', icon: 'user', affix: true }
+        // meta: { title: '首页', icon: 'dashboard' }
+      }
+    ]
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
   },
@@ -91,7 +128,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/documentation/index'),
         name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        meta: { title: 'Documentation', icon: 'documentation' }
       }
     ]
   },
@@ -185,6 +222,7 @@ export const asyncRoutes = [
   },
 
   /** when your routing map is too long, you can split it into small modules **/
+  testDemoRouter,
   componentsRouter,
   chartsRouter,
   nestedRouter,
